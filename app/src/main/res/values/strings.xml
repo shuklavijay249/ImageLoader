@@ -9,7 +9,6 @@
     <string name="error_message">Something went wrong. Please try again.</string>
     <string name="no_results_found">No restaurants found nearby.</string>
 
-    <string name="restaurant_image">Image of the restaurant</string>
     <string name="open_status_open">Currently OPEN</string>
     <string name="open_status_closed">Currently CLOSED</string>
 

@@ -11,29 +11,7 @@
     <color name="colorPrimaryDark">#388E3C</color>
     <color name="colorAccent">#8BC34A</color>
 
-    <!-- Text colors -->
-    <color name="textColorPrimary">#212121</color>
-    <color name="textColorSecondary">#757575</color>
     <color name="white">#FFFFFF</color>
-
-    <!-- Background colors -->
-    <color name="backgroundColor">#F5F5F5</color>
-    <color name="dividerColor">#BDBDBD</color>
-
-    <!-- Button and icon colors -->
-    <color name="buttonColor">#4CAF50</color>
-    <color name="buttonTextColor">#FFFFFF</color>
-    <color name="iconColor">#4CAF50</color>
-
-
-    <color name="redColor">#FF0000</color>
-
-    <!-- Other colors -->
-    <color name="grey">#9E9E9E</color>
     <color name="black">#000000</color>
-
-    <color name="hint_color">#808080</color>
-    <color name="search_background_color">#FFFFFF</color>
-    <color name="search_text_color">#000000</color>
 
 </resources>
