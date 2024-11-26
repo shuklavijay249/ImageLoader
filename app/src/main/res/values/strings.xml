@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Restaurants Finder</string>
+    <string name="app_name">Image Loader</string>
 
     <string name="radius">Radius: %1$d m</string>
 

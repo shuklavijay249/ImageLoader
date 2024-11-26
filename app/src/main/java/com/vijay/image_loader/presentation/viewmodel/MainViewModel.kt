@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
     val images: Flow<PagingData<Image>> = Pager(
-        config = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false, maxSize = 100 ),
         pagingSourceFactory = { ImagePagingSource(repository, 10) }
     ).flow.cachedIn(viewModelScope)
 
@@ -37,7 +37,7 @@ class MainViewModel @Inject constructor(
     private fun fetchImages() {
         viewModelScope.launch {
             try {
-                repository.fetchImages(10)
+                repository.fetchImages(10, 0)
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to load images: ${e.message}"
             }

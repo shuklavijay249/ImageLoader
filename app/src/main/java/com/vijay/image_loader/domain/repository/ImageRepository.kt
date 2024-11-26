@@ -1,5 +1,5 @@
 package com.vijay.image_loader.domain.repository
 
 interface ImageRepository {
-    suspend fun fetchImages(limit: Int): String
+    suspend fun fetchImages(limit: Int, offset: Int): String
 }
