@@ -16,23 +16,19 @@ class ImagePagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Image> {
         return try {
             val currentPage = params.key ?: 0
-            val offset = currentPage * pageSize
-            val rawResponse = repository.fetchImages(pageSize, offset)
-
-            val apiResponseList: List<ApiResponse> = Gson().fromJson(
-                rawResponse,
+            val response = repository.fetchImages(pageSize)
+            val apiResponse: List<ApiResponse> = Gson().fromJson(
+                response,
                 object : TypeToken<List<ApiResponse>>() {}.type
             )
 
-            val images = apiResponseList.mapIndexed { index, apiResponse ->
-                val position = offset + index
+            val images = apiResponse.map {
                 Image(
-                    id = apiResponse.id,
-                    title = apiResponse.title,
-                    language = apiResponse.language,
-//                    thumbnailUrl = "${apiResponse.thumbnail.domain}/${apiResponse.thumbnail.basePath}/$currentPage/${apiResponse.thumbnail.key}",
-                    thumbnailUrl = "${apiResponse.thumbnail.domain}/${apiResponse.thumbnail.basePath}/0/${apiResponse.thumbnail.key}",
-                    mediaType = apiResponse.mediaType
+                    id = it.id,
+                    title = it.title,
+                    thumbnailUrl = "${it.thumbnail.domain}/${it.thumbnail.basePath}/0/${it.thumbnail.key}",
+                    language = it.language,
+                    mediaType = it.mediaType
                 )
             }
 
@@ -47,10 +43,6 @@ class ImagePagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Image>): Int? {
-        return state.anchorPosition?.let { position ->
-            state.closestPageToPosition(position)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(position)?.nextKey?.minus(1)
+        return state.anchorPosition?.let { state.closestPageToPosition(it)?.prevKey?.plus(1) }
         }
     }
-
-}

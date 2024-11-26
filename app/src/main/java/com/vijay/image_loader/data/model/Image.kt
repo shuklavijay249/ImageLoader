@@ -5,7 +5,7 @@ data class Image(
     val title: String,
     val thumbnailUrl: String,
     val language: String,
-    val mediaType: Int,
+    val mediaType: Int
 //    val publishedAt: String,
 )
 

@@ -22,8 +22,8 @@ import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
-class ImageGridAdapter(private val onImageClick: (String) -> Unit) :
-    PagingDataAdapter<Image, ImageGridAdapter.ImageViewHolder>(ImageDiffCallback()) {
+class ImageAdapter(private val onImageClick: (String) -> Unit) :
+    PagingDataAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val binding = ItemImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -44,14 +44,13 @@ class ImageGridAdapter(private val onImageClick: (String) -> Unit) :
             val context = binding.root.context
             val imageUrl = image.thumbnailUrl
 
-            // Set a placeholder image initially
             binding.imageView.setImageResource(R.drawable.image_background)
 
-            // Try to load from memory cache
+            // load from memory cache
             MemoryCache.get(imageUrl)?.let {
                 binding.imageView.setImageBitmap(it)
             } ?: run {
-                // Try to load from disk cache
+                // load from disk cache
                 val diskCachedBitmap = DiskCache(context).get(imageUrl)
                 if (diskCachedBitmap != null) {
                     // Update memory cache and display
@@ -67,8 +66,6 @@ class ImageGridAdapter(private val onImageClick: (String) -> Unit) :
                 onImageClick(imageUrl)
             }
         }
-
-       // private val jobMap = mutableMapOf<ImageView, Job>()
 
         private fun loadImageFromNetwork(
             url: String,
@@ -117,8 +114,8 @@ class ImageGridAdapter(private val onImageClick: (String) -> Unit) :
         }
     }
 
-    // DiffUtil callback to compare images
-    class ImageDiffCallback : DiffUtil.ItemCallback<Image>() {
+    //compare images
+    class ImageDiffUtil : DiffUtil.ItemCallback<Image>() {
         override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
             return oldItem.id == newItem.id
         }

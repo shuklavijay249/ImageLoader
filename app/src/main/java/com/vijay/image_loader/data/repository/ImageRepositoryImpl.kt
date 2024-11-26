@@ -8,11 +8,11 @@ import javax.inject.Inject
 class ImageRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : ImageRepository {
-    override suspend fun fetchImages(limit: Int, offset: Int): String {
+    override suspend fun fetchImages(limit: Int): String {
         // API response
-        val response = apiService.getMediaCoverages(limit, offset)
+        val response = apiService.getMediaCoverages(limit)
 
-        // Convert response to JSON string
+        // response to JSON
         return Gson().toJson(response)
     }
 }

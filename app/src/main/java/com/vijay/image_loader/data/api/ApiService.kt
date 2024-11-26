@@ -8,7 +8,6 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("media-coverages")
     suspend fun getMediaCoverages(
-        @Query("limit") limit: Int,
-        @Query("offset") offset: Int
+        @Query("limit") limit: Int
     ): List<ApiResponse>
 }

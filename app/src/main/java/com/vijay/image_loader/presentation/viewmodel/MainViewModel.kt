@@ -11,6 +11,10 @@ import com.vijay.image_loader.domain.repository.ImageRepository
 import com.vijay.image_loader.utils.ImagePagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,21 +22,25 @@ class MainViewModel @Inject constructor(
     private val repository: ImageRepository
 ) : ViewModel() {
 
-    companion object {
-        private const val PAGE_SIZE = 10 // Items per page
-        private const val PREFETCH_DISTANCE = 5  // Number of items to prefetch
-        private const val MAX_CACHE_SIZE = 100  // Max size of cached items
-
-    }
+    private val _errorMessage = MutableStateFlow("")
+    val errorMessage: StateFlow<String> = _errorMessage.asStateFlow()
 
     val images: Flow<PagingData<Image>> = Pager(
-        config = PagingConfig(
-            pageSize = PAGE_SIZE,
-            prefetchDistance = PREFETCH_DISTANCE,   // Preload 10 items before reaching the end of the list
-            enablePlaceholders = false,
-            maxSize = MAX_CACHE_SIZE            // Maximum number of cached images
-
-        ),
-        pagingSourceFactory = { ImagePagingSource(repository, PAGE_SIZE) }
+        config = PagingConfig(pageSize = 10, prefetchDistance = 5, enablePlaceholders = false),
+        pagingSourceFactory = { ImagePagingSource(repository, 10) }
     ).flow.cachedIn(viewModelScope)
+
+    init {
+        fetchImages()
+    }
+
+    private fun fetchImages() {
+        viewModelScope.launch {
+            try {
+                repository.fetchImages(10)
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to load images: ${e.message}"
+            }
+        }
+    }
 }
